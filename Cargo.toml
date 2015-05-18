@@ -1,0 +1,17 @@
+[package]
+name = "voronoi"
+version = "0.1.0"
+authors = ["Mikael Silvén <mikael@silven.nu>"]
+
+[dependencies.glium]
+version = "*"
+features = ["cgmath"]
+
+[dependencies]
+glutin = "*"
+genmesh = "*"
+clock_ticks = "*"
+obj = "*"
+cgmath = "*"
+rand = "*"
+image = "*"
