@@ -55,21 +55,19 @@ fn main() {
         .unwrap();
 
     let mut cone_data = vec![PosOnlyVertex { position: [ 0.0, 0.0, 0.0] }];
-    for i in (0..360).step_by(5) {
+    let triangles_per = 60;
+    for i in (0..360).step_by(360 / triangles_per) {
         let x = 10.0 * (i as f32 * std::f32::consts::PI / 180.0).cos();
         let y = 10.0 * (i as f32 * std::f32::consts::PI / 180.0).sin();
-        cone_data.push(PosOnlyVertex { position: [ x, y, 2.0] });
-    }
-    {
-        let start = cone_data[1].clone();
-        cone_data.push(start);
+        cone_data.push(PosOnlyVertex { position: [ x, y, 1.0] });
     }
 
-    let index_data = (0..cone_data.len() as u16).collect();
+    let mut index_data: Vec<u16> = (0..cone_data.len() as u16).collect();
+    index_data.push(1);
     let indices = glium::IndexBuffer::new(&display, glium::index::TriangleFan(index_data));
     let cone = glium::VertexBuffer::new(&display, cone_data);
 
-    let mut n_cones = 200;
+    let mut n_cones = 20;
     let mut offsets = glium::vertex::VertexBuffer::new(&display, gen_offsets(n_cones));
 
     let pm = programs::ProgramManager::new();
@@ -107,7 +105,7 @@ fn main() {
                 },
 
                 glutin::Event::KeyboardInput(glutin::ElementState::Pressed, _, Some(glutin::VirtualKeyCode::Down)) => {
-                    if n_cones > 2 {
+                    if n_cones >= 2 {
                         n_cones -= 1;
                         offsets = glium::vertex::VertexBuffer::new(&display, gen_offsets(n_cones));
                     }
